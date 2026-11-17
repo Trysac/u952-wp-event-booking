@@ -1,0 +1,39 @@
+{
+    "name": "trysac/u952-wp-event-booking",
+    "description": "Event booking core with seat capacity, FIFO waitlists, idempotent requests and atomic conditional updates that never oversell under concurrent bookings, ready for WordPress",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Miguel Gomez"
+        }
+    ],
+    "homepage": "https://github.com/Trysac/u952-wp-event-booking",
+    "require": {
+        "php": ">=8.4"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.95",
+        "phpstan/phpstan": "^2.3",
+        "phpstan/phpstan-phpunit": "^2.1",
+        "phpstan/phpstan-strict-rules": "^2.1",
+        "phpunit/phpunit": "^13.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Trysac\\WpEventBooking\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Trysac\\WpEventBooking\\Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "allow-plugins": false,
+        "platform": {
+            "php": "8.4.1"
+        },
+        "sort-packages": true
+    }
+}

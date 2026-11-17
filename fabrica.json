@@ -1,0 +1,1 @@
+{"lang": "php", "package": "trysac/u952-wp-event-booking", "commands": {"install": [["composer", "install", "--no-interaction", "--no-progress", "--prefer-dist"]], "check": [["php", "scripts/check.php"]]}}

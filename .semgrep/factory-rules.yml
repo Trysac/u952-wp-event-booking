@@ -1,0 +1,61 @@
+# Semgrep CE rules owned by the factory (MIT, like this repository). The semgrep gate in scripts/check.php runs only
+# this file; Semgrep-maintained registry rules are never used (their license forbids distribution and service use).
+# Every rule is ERROR: a match fails the gate. Factory-owned file: agents must not edit it.
+rules:
+  - id: fabrica.php.code-eval
+    languages: [php]
+    severity: ERROR
+    message: eval(), create_function() and assert() on a string run their input as PHP code. Interpret the input explicitly instead.
+    pattern-either:
+      - pattern: eval(...)
+      - pattern: create_function(...)
+      - pattern: assert("...", ...)
+  - id: fabrica.php.shell-exec
+    languages: [php]
+    severity: ERROR
+    message: Running a command line built from data (shell_exec, system, exec, passthru, popen or proc_open with a string) goes through /bin/sh and allows command injection. Pass an argument list to proc_open() instead, or escape every part with escapeshellarg().
+    pattern-either:
+      - pattern: shell_exec(...)
+      - patterns:
+          - pattern-either:
+              - pattern: system($CMD, ...)
+              - pattern: exec($CMD, ...)
+              - pattern: passthru($CMD, ...)
+              - pattern: popen($CMD, ...)
+              - pattern: proc_open($CMD, ...)
+              - pattern: pcntl_exec($CMD, ...)
+          - pattern-not: $F("...", ...)
+          - pattern-not: proc_open([...], ...)
+  - id: fabrica.php.unserialize-input
+    languages: [php]
+    severity: ERROR
+    message: unserialize() on data that is not a literal can instantiate any class and run its magic methods (object injection). Use json_decode(), or pass ['allowed_classes' => false].
+    patterns:
+      - pattern: unserialize($DATA, ...)
+      - pattern-not: unserialize("...", ...)
+      - pattern-not: unserialize($DATA, ['allowed_classes' => false])
+  - id: fabrica.php.tls-verification-disabled
+    languages: [php]
+    severity: ERROR
+    message: TLS certificate or host name verification is disabled, so any server can impersonate the real one.
+    pattern-either:
+      - pattern: curl_setopt($CH, CURLOPT_SSL_VERIFYPEER, false)
+      - pattern: curl_setopt($CH, CURLOPT_SSL_VERIFYPEER, 0)
+      - pattern: curl_setopt($CH, CURLOPT_SSL_VERIFYHOST, false)
+      - pattern: curl_setopt($CH, CURLOPT_SSL_VERIFYHOST, 0)
+      - pattern: "[..., CURLOPT_SSL_VERIFYPEER => false, ...]"
+      - pattern: "[..., CURLOPT_SSL_VERIFYHOST => 0, ...]"
+      - pattern: "[..., 'verify_peer' => false, ...]"
+      - pattern: "[..., 'verify_peer_name' => false, ...]"
+      - pattern: "[..., 'allow_self_signed' => true, ...]"
+      - pattern: "[..., 'verify' => false, ...]"
+  - id: fabrica.php.hardcoded-secret
+    languages: [php]
+    severity: ERROR
+    message: A credential (private key, AKIA access key, GitHub, Slack or Stripe token) is hard-coded in the source. Read it from the environment.
+    pattern-either:
+      - pattern-regex: -----BEGIN (RSA |EC |DSA |OPENSSH |ENCRYPTED )?PRIVATE KEY-----
+      - pattern-regex: \b(AKIA|ASIA)[0-9A-Z]{16}\b
+      - pattern-regex: \bgh[pousr]_[A-Za-z0-9]{36}\b
+      - pattern-regex: \bxox[baprs]-[A-Za-z0-9-]{10,}\b
+      - pattern-regex: \bsk_live_[A-Za-z0-9]{24,}\b

@@ -1,0 +1,20 @@
+# Factory-owned file: agents must not edit it. Layout of this repository; PHP-CS-Fixer (.php-cs-fixer.dist.php)
+# enforces the PHP style in the format gate.
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{json,yml,yaml,neon}]
+indent_size = 2
+
+[composer.json]
+indent_size = 4
+
+[*.md]
+trim_trailing_whitespace = false

@@ -1,0 +1,18 @@
+# Composer dependencies (restored from composer.lock by `composer install`)
+vendor/
+
+# Tool caches and reports
+.phpunit.cache/
+.phpunit.result.cache
+.php-cs-fixer.cache
+coverage/
+clover.xml
+
+# IDE
+.idea/
+.vscode/
+
+# Local environment
+.env
+.env.*
+!.env.example

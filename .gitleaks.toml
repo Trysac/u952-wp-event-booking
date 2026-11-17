@@ -1,0 +1,13 @@
+# gitleaks configuration: default rules plus local-only paths that are never committed.
+title = "wp-event-booking gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Composer dependencies and local tool output (ignored by git)"
+paths = [
+  '''(^|/)vendor/''',
+  '''(^|/)(\.phpunit\.cache|coverage)/''',
+  '''(^|/)clover\.xml$''',
+]
