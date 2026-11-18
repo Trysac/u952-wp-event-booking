@@ -9,4 +9,5 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- Added atomic event booking core (`Event`, `Attendee`, `BookingService`, `PdoStore`, `InMemoryStore`, `RecordingMailer`, `Messages`, and `Cli`) with FIFO waitlist promotion, idempotency keys, header-injection protection, and 20-process concurrency verification.
 - Initial project structure from the factory utility template.
